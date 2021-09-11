@@ -1,5 +1,5 @@
 const  auth = require("../middlewares/auth");
-const  checkUserOrOwner = require("../middlewares/checkUserOrOwner");
+const  checkOwner = require("../middlewares/checkOwner");
 const express = require('express');
 const router = express.Router();
 const { myProfile,
@@ -43,7 +43,7 @@ const path = require('path');
 
 router.get("/me", auth, myProfile) // My Profile
 // router.get("/uploads/:filename",auth,updateUserProfilePic)//Get profile photo
-router.get('/all-user', auth, getAllUsers) // Get All Users
+router.get('/all-user', auth,checkOwner,getAllUsers) // Get All Users
 router.get('/:id', auth, getOneUser); // Get A Single User
 router.get('/:id/viewedproducts', auth, getViewedProducts); // Get Products Viewed By User
 router.get('/:id/myproducts', auth, getProductByCategory); // Get Products Made

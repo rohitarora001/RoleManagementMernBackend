@@ -6,13 +6,14 @@ const userSchema = require('../models/userSchema');
 
 module.exports = async (req, res, next) => {
     try {
+        let user1;
         if (req.headers.authorization) {
             const token = req.headers.authorization.split(" ")[1];
             const liveUser = jwt.verify(token, process.env.JWT_SECRET);
             // console.log(liveUser)
             const user = await userSchema.findById(liveUser.id)
             // console.log(user.role)
-            if (user && user.role === 2) {
+            if (user && user.role === 1) {
                 next();
             }
             else {
