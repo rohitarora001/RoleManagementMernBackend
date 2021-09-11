@@ -186,9 +186,10 @@ exports.getProductByCategory = async (req, res, next) => {
     // console.log(req.params.id)
     const token = req.headers.authorization.split(" ")[1];
     const user = await jwt.verify(token, process.env.JWT_SECRET);
-    const liveUser = await userSchema.findById(user.id)
+    const liveUser = await userSchema.exists(user.id)
+    if(liveUser == true)
     // console.log(user.role)
-    
+    {
       await categorySchema
         .findOne({ _id: req.params.id })
         .select('products')
@@ -198,6 +199,12 @@ exports.getProductByCategory = async (req, res, next) => {
           // console.log(product);
           res.status(200).send(product);
         })
+    }
+    else{
+      res.status(401).json({
+        message:"Prohitbited"
+      })
+    }
   }
   catch (error) {
     // throw error

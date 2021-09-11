@@ -138,10 +138,10 @@ exports.deleteUser = async (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const user = await jwt.verify(token, process.env.JWT_SECRET);
     const liveUser = await userSchema.findById(user.id)
-    console.log(liveUser)
-    console.log(liveUser.role)
+    const liveUserId = liveUser.id.toString()
+    console.log(liveUserId)
     console.log(req.params.id)
-    if (req.params.id == liveUser.id || liveUser.role == 1 ) {
+    if (req.params.id == liveUserId  ) {
       await userSchema.findByIdAndRemove(user.id, (err, data) => {
         if (err) return err;
         else if (data == null) return res.status(200).json({ message: "The user does not exists" })
