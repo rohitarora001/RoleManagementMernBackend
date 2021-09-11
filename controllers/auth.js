@@ -69,7 +69,6 @@ exports.userSignup = async (req, res, next) => {
     }
     const encryptedPassword = await bcrypt.hash(req.body.password, 10);
     const user = new userSchema({
-      avatar: req.file.filename,
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       phone: req.body.phone,

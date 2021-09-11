@@ -26,10 +26,10 @@ exports.getAllUsers = async (req, res) => {
   const user = await jwt.verify(token, process.env.JWT_SECRET);
   const id = user.id
   await userSchema.find({ _id: { $ne: id } })
-  .exec(function(err,data){
-    if (err) next(err)
-    res.status(200).send(data)
-  })
+    .exec(function (err, data) {
+      if (err) next(err)
+      res.status(200).send(data)
+    })
 }
 
 //Get a single user
@@ -134,21 +134,14 @@ exports.updateUserProfilePic = async (req, res, next) => {
 //  Deleting a user
 exports.deleteUser = async (req, res, next) => {
   try {
+    // console.log("Hi")
     const token = req.headers.authorization.split(" ")[1];
     const user = await jwt.verify(token, process.env.JWT_SECRET);
-    const Owner = await userSchema.findById(user.id)
-    if (req.params.id == user.id) {
-      await userSchema.findByIdAndRemove(user.id, (err, data) => {
-        if (err) return err;
-        else if (data == null) return res.status(200).json({ message: "The user does not exists" })
-        else return res.status(200).json({
-          status: "ok",
-          message: "The user Deleted Successfully.",
-          data: data
-        })
-      })
-    }
-    else if (req.params.id != user.id && Owner.role == 1) {
+    const liveUser = await userSchema.findById(user.id)
+    console.log(liveUser)
+    console.log(liveUser.role)
+    console.log(req.params.id)
+    if (req.params.id == liveUser.id || liveUser.role == 1 ) {
       await userSchema.findByIdAndRemove(user.id, (err, data) => {
         if (err) return err;
         else if (data == null) return res.status(200).json({ message: "The user does not exists" })
@@ -167,9 +160,8 @@ exports.deleteUser = async (req, res, next) => {
     }
   }
   catch (err) {
-    res.status(500).json({
-      message: "An error occurred" + err
-    })
+    console.log(err)
+    res.send(err)
   }
 }
 // Get admin products

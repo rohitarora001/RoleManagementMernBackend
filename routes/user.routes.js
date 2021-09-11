@@ -51,6 +51,6 @@ router.get('/:id/mycategory', auth, getAdminCategory); // Get Category made
 router.post('/change-password/:id', auth, changePassword) // Password change
 router.patch('/update-user/:id', auth, updateUser) // Update a user
 router.put('/update-user-picture/:id', auth,  updateUserProfilePic) // Update profile Picture
-router.delete('/delete-user/:id', auth, checkUserOrOwner, deleteUser); // Delete A User
+router.delete('/:id/delete', auth, checkUserOrOwner, deleteUser); // Delete A User
 
 module.exports = router;

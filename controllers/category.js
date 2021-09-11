@@ -115,9 +115,6 @@ exports.deleteCategory = async (req, res, next) => {
     const liveUser = await userSchema.findById(user.id).select("role")
     let id = user.id.toString()
     let catId = category.createdBy.toString()
-    console.log(id)
-    console.log(catId)
-    console.log(liveUser.role)
     if (categoryExists) {
       if (liveUser.role == 1 || liveUser.role == 2 && catId === id) {
         try {
