@@ -15,9 +15,10 @@ const product = require('./routes/product.routes')
 const app = express();
 // Express Configurations
 app.use(express.urlencoded({ extended: true }))
-app.use(cors({
-    origin:"*",
-}));
+// app.use(cors({
+//     origin:"*",
+// }));
+app.use(allowCrossDomain)
 app.use(express.json());
 // app.use((req, res, next) => {
 //     res.header('Access-Control-Allow-Origin', '*');
