@@ -21,13 +21,14 @@ exports.myProfile = async (req, res) => {
 };
 
 // Get all users
-exports.getAllUsers = (req, res) => {
-  userSchema.find((error, response) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.status(200).json(response)
-    }
+exports.getAllUsers = async (req, res) => {
+  const token = req.headers.authorization.split(" ")[1];
+  const user = await jwt.verify(token, process.env.JWT_SECRET);
+  const id = user.id
+  await userSchema.find({ _id: { $ne: id } })
+  .exec(function(err,data){
+    if (err) next(err)
+    res.status(200).send(data)
   })
 }
 
