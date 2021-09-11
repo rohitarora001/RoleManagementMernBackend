@@ -188,7 +188,7 @@ exports.getProductByCategory = async (req, res, next) => {
     const user = await jwt.verify(token, process.env.JWT_SECRET);
     const liveUser = await userSchema.findById(user.id)
     // console.log(user.role)
-    if (liveUser.role == 1 || liveUser.role == 2) {
+    
       await categorySchema
         .findOne({ _id: req.params.id })
         .select('products')
@@ -198,15 +198,6 @@ exports.getProductByCategory = async (req, res, next) => {
           // console.log(product);
           res.status(200).send(product);
         })
-  }
-    else {
-      res.status(401).json({
-        data: {
-          status: "error",
-          message: "You are not authorized for this action"
-        }
-      })
-    }
   }
   catch (error) {
     // throw error
