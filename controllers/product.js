@@ -186,7 +186,7 @@ exports.getProductByCategory = async (req, res, next) => {
     // console.log(req.params.id)
     const token = req.headers.authorization.split(" ")[1];
     const user = await jwt.verify(token, process.env.JWT_SECRET);
-    const liveUser = await userSchema.exists(user.id)
+    const liveUser = await userSchema.exists({_id:user.id})
     if(liveUser == true)
     // console.log(user.role)
     {
