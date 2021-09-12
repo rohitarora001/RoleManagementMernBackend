@@ -55,14 +55,14 @@ exports.userSignup = async (req, res, next) => {
     }
 
     else if (!phoneNo) {
-      return res.status(400).json({
+      res.status(400).json({
         status: "Error",
         message: "Invalid Phone Number"
       })
     }
     // Email validation
     else if (!emailAddr) {
-      return res.status(400).json({
+      res.status(400).json({
         status: "Error",
         message: "Invalid Email Address"
       })
