@@ -76,7 +76,7 @@ exports.updateCategory = async (req, res, next) => {
     console.log(id)
     console.log(catId)
 
-    if (catId === id && user.role == 1 || user.role == 2) {
+    if (catId === id) {
       try {
         const updates = req.body;
         const options = { new: true };
