@@ -77,7 +77,7 @@ exports.userSignup = async (req, res, next) => {
       role: req.body.role,
       products: [],
       categories: [],
-      productsliked: []
+      productsviewed: []
     });
     await user
       .save()
