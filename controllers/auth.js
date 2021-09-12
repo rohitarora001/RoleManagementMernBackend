@@ -55,14 +55,17 @@ exports.userSignup = async (req, res, next) => {
     }
 
     else if (!phoneNo) {
-      res.status(400).json({
+      return res.status(400).json({
         status: "Error",
         message: "Invalid Phone Number"
       })
     }
     // Email validation
     else if (!emailAddr) {
-      res.status(400).send("Invalid Email Address")
+      return res.status(400).json({
+        status: "Error",
+        message: "Invalid Email Address"
+      })
     }
     const encryptedPassword = await bcrypt.hash(req.body.password, 10);
     const user = new userSchema({
