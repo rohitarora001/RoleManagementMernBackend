@@ -140,8 +140,8 @@ exports.deleteUser = async (req, res, next) => {
     const liveUser = await userSchema.findById(user.id)
     const liveUserId = liveUser.id.toString()
     console.log(req.params.id)
-    if (req.params.id == liveUserId || liveUser.role == 1 ) {
-      await userSchema.findByIdAndRemove(user.id, (err, data) => {
+    if (req.params.id == liveUserId || liveUser.role == 1) {
+      await userSchema.findByIdAndRemove(req.params.id, (err, data) => {
         if (err) return err;
         else if (data == null) return res.status(200).json({ message: "The user does not exists" })
         else return res.status(200).json({
