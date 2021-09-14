@@ -12,8 +12,6 @@ const { myProfile,
   deleteUser,
   changePassword,
   updateUserProfilePic } = require('../controllers/user')
-const multer = require('multer')
-const path = require('path');
 
 // Config for multer
 // const DIR = path.join(__dirname, '../uploads/Users')

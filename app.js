@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const port = process.env.PORT||4000;
+const port = process.env.PORT || 4000;
 const app = express();
 app.use(cors())
 
@@ -11,6 +11,7 @@ connectDB();
 
 const auth = require('./routes/auth.routes');
 const users = require('./routes/user.routes')
+const admin = require('./routes/admin.routes')
 const categories = require('./routes/category.routes')
 const product = require('./routes/product.routes')
 // Express Configurations
@@ -20,6 +21,7 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", auth);
 app.use("/api/users", users);
+app.use("/api/admin", admin);
 app.use("/api/category", categories);
 app.use("/api/products", product);
 

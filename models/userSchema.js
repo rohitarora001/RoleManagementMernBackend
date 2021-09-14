@@ -32,17 +32,44 @@ const userSchema = new mongoose.Schema({
     },
     products: {
         type: [mongoose.Schema.Types.ObjectId],
-        ref:'Product'
+        ref: 'Product'
     },
     productsviewed: {
         type: [mongoose.Schema.Types.ObjectId],
-        ref:'Product'
+        ref: 'Product'
+    },
+    canEditCategory: {
+        type: Boolean,
+        default: false
+    },
+    canDeleteCategory: {
+        type: Boolean,
+        default: false
+    },
+    canAddCategory: {
+        type: Boolean,
+        default: false
+    },
+    canEditProduct: {
+        type: Boolean,
+        default: false
+    },
+    canDeleteProduct: {
+        type: Boolean,
+        default: false
+    },
+    canAddProduct: {
+        type: Boolean,
+        default: false
+    },
+    canDeleteUser: {
+        type: Boolean,
+        default: false
     },
     categories: {
         type: [mongoose.Schema.Types.ObjectId],
-        ref:'Category'
+        ref: 'Category'
     }
-
 },
     { timestamps: true }
 )
