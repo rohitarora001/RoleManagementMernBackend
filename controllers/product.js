@@ -6,12 +6,19 @@ const jwt = require("jsonwebtoken");
 // Add product
 exports.addProduct = async (req, res, next) => {
   try {
+    
     const id = req.body.category;
     const categoryExists = await categorySchema.exists({ _id: req.body.category })
-    // console.log(categoryExists)
-    if (categoryExists) {
-      const token = req.headers.authorization.split(" ")[1];
-      const user = await jwt.verify(token, process.env.JWT_SECRET);
+    const token = req.headers.authorization.split(" ")[1];
+    const user = await jwt.verify(token, process.env.JWT_SECRET);
+    const liveUser = await userSchema.findById(user.id)
+    if( liveUser.role == 4 && liveUser.canAddProduct == false)
+    {
+      return res.status(401).json({
+        message:"You are not authorized for this action"
+      })
+    } 
+    else if (categoryExists) {
       const productObj = new productSchema({
         name: req.body.name,
         description: req.body.description,
@@ -82,9 +89,11 @@ exports.deleteProduct = async (req, res, next) => {
       const token = req.headers.authorization.split(" ")[1];
       const user = await jwt.verify(token, process.env.JWT_SECRET);
       const uid = user.id.toString()
-      const pid = product.toString()
+      const pid = product.createdBy.toString()
+      // console.log(pid)
+      // console.log(uid)
       const liveUser = await userSchema.findById(user.id)
-      if (liveUser.role == 1 || liveUser.role == 2 && pid == uid) {
+      if (liveUser.role != 3 && pid == uid || liveUser.role == 1 || liveUser.canDeleteProduct == true) {
         await categorySchema.findOneAndUpdate({ _id: product.category }, {
           $pull: {
             products: product.id
@@ -230,7 +239,7 @@ exports.updateProduct = async (req, res, next) => {
     // console.log(uid)
     // console.log(liveUser.role)
     if (productExists == true) {
-      if (liveUser.role == 1 || liveUser.role == 2 && pid == uid) {
+      if (liveUser.role != 3 && pid == uid || liveUser.role == 1 || liveUser.canEditProduct == true ) {
         const updates = req.body;
         const options = { new: true };
         const result = await productSchema.findByIdAndUpdate(req.params.id, updates, options)

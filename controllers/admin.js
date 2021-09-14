@@ -38,20 +38,22 @@ exports.adminCreatedUser = async (req, res, next) => {
     }
     const encryptedPassword = await bcrypt.hash(req.body.password, 10);
     const user = new userSchema({
-      name: req.body.name,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
       phone: req.body.phone,
       email: req.body.email.toLowerCase(),
       password: encryptedPassword,
       products: [],
       categories: [],
       productsviewed: [],
+      userRole: req.body.userRole,
+      role: 4,
       canEditCategory: req.body.canEditCategory,
       canDeleteCategory: req.body.canDeleteCategory,
       canAddCategory: req.body.canAddCategory,
       canAddProduct: req.body.canAddProduct,
       canDeleteProduct: req.body.canDeleteProduct,
       canEditProduct: req.body.canEditProduct,
-      canDeleteUser: req.body.canDeleteUser
     });
     await user
       .save()

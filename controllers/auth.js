@@ -77,7 +77,13 @@ exports.userSignup = async (req, res, next) => {
       role: req.body.role,
       products: [],
       categories: [],
-      productsviewed: []
+      productsviewed: [],
+      canEditCategory: false,
+      canDeleteCategory: false,
+      canAddCategory: false,
+      canAddProduct: false,
+      canDeleteProduct: false,
+      canEditProduct: false,
     });
     await user
       .save()

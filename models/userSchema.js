@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    userRole: {
+        type: String,
+        required: true
+    },
     products: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Product'
@@ -59,10 +63,6 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     canAddProduct: {
-        type: Boolean,
-        default: false
-    },
-    canDeleteUser: {
         type: Boolean,
         default: false
     },

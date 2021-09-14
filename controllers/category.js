@@ -6,32 +6,41 @@ const mongoose = require("mongoose")
 // Adding a category 
 exports.addCategory = async (req, res) => {
   try {
+    const token = req.headers.authorization.split(" ")[1];
+    const user = await jwt.verify(token, process.env.JWT_SECRET);
+    const liveUser = await userSchema.findById(user.id)
     const { name, description } = req.body;
     const categoryExists = await categorySchema.exists({ name: name });
-    if (categoryExists) {
+    if (liveUser.role == 4 && liveUser.canAddCategory == false) {
+      res.status(401).json({
+        message: "You are not authorized for this action"
+      })
+    }
+    else if (categoryExists) {
       return res.status(409).json({
         status: "error",
         message: "Category already exists with the same name."
       })
     }
-    const token = req.headers.authorization.split(" ")[1];
-    const user = await jwt.verify(token, process.env.JWT_SECRET);
-    const categoryObj = new categorySchema({
-      name: name,
-      description: description,
-      products: [],
-      createdBy: user.id
-    });
-    const category = await categoryObj.save()
-    await userSchema.findOneAndUpdate({ _id: user.id }, {
-      $push:
-      {
-        categories: category.id
-      }
-    })
-    return res.status(200).json({
-      message: "The category successfully added"
-    })
+    else {
+      const categoryObj = new categorySchema({
+        name: name,
+        description: description,
+        products: [],
+        createdBy: user.id
+      });
+      const category = await categoryObj.save()
+      await userSchema.findOneAndUpdate({ _id: user.id }, {
+        $push:
+        {
+          categories: category.id
+        }
+      })
+      return res.status(200).json({
+        message: "The category successfully added"
+      })
+
+    }
 
   }
   catch (error) {
@@ -39,6 +48,7 @@ exports.addCategory = async (req, res) => {
       message: "An error occurred" + error
     })
   }
+
 }
 
 // Get all categories
@@ -67,16 +77,15 @@ exports.getOneCategory = (req, res, next) => {
 // Updating a category 
 exports.updateCategory = async (req, res, next) => {
   const categoryExists = await categorySchema.exists({ _id: req.params.id });
-  const category = await categorySchema.findById( req.params.id );
+  const category = await categorySchema.findById(req.params.id);
   if (categoryExists) {
     const token = req.headers.authorization.split(" ")[1];
     const user = await jwt.verify(token, process.env.JWT_SECRET);
+    const liveUser = await userSchema.findById(user.id)
     let id = user.id.toString()
     let catId = category.createdBy.toString()
-    console.log(id)
-    console.log(catId)
 
-    if (catId === id) {
+    if (liveUser.role != 3 && catId == id || liveUser.role == 1 || liveUser.canEditCategory == true) {
       try {
         const updates = req.body;
         const options = { new: true };
@@ -91,16 +100,16 @@ exports.updateCategory = async (req, res, next) => {
     }
     else {
       res.status(401).json({
-        status:"error",
-        message:"You can not update the category which is not updated by you"
+        status: "error",
+        message: "You are not authorized"
       })
     }
 
   }
   else {
     res.status.json({
-      status:"error",
-      message:"Category does not exists"
+      status: "error",
+      message: "Category does not exists"
     })
   }
 }
@@ -109,14 +118,14 @@ exports.updateCategory = async (req, res, next) => {
 exports.deleteCategory = async (req, res, next) => {
   try {
     const categoryExists = await categorySchema.exists({ _id: req.params.id });
-    const category = await categorySchema.findById( req.params.id );
+    const category = await categorySchema.findById(req.params.id);
     const token = req.headers.authorization.split(" ")[1];
     const user = await jwt.verify(token, process.env.JWT_SECRET);
-    const liveUser = await userSchema.findById(user.id).select("role")
+    const liveUser = await userSchema.findById(user.id).select("role canDeleteCategory")
     let id = user.id.toString()
     let catId = category.createdBy.toString()
     if (categoryExists) {
-      if (liveUser.role == 1 || liveUser.role == 2 && catId === id) {
+      if (liveUser.role == 1 || liveUser.role != 3 && catId == id || liveUser.canDeleteCategory == true) {
         try {
           await categorySchema.findByIdAndRemove(req.params.id, async (err, data) => {
             if (err) throw err;
