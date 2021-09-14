@@ -42,7 +42,6 @@ exports.adminCreatedUser = async (req, res, next) => {
       phone: req.body.phone,
       email: req.body.email.toLowerCase(),
       password: encryptedPassword,
-      role: 4,
       products: [],
       categories: [],
       productsviewed: [],
