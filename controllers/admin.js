@@ -1,6 +1,7 @@
 const userSchema = require('../models/userSchema');
 const bcrypt = require('bcrypt')
 
+// For creating a user with custom roles
 exports.adminCreatedUser = async (req, res, next) => {
   try {
     // Phone number and email validation
@@ -67,5 +68,20 @@ exports.adminCreatedUser = async (req, res, next) => {
       message: "An error occured." + err
     })
     console.log(err);
+  }
+}
+
+// Revoking and giving permisions to users
+exports.permissionControl = async (req, res, next) => {
+  try {
+    const updates = req.body;
+    const options = { new: true };
+    const result = await userSchema.findByIdAndUpdate(req.params.id, updates, options)
+    res.send(result);
+  }
+  catch (e) {
+    res.status(500).json({
+      message: "Something went wrong " + e
+    })
   }
 }
