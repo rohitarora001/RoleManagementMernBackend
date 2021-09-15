@@ -11,7 +11,7 @@ exports.addCategory = async (req, res) => {
     const liveUser = await userSchema.findById(user.id)
     const { name, description } = req.body;
     const categoryExists = await categorySchema.exists({ name: name });
-    if (liveUser.role == 4 && liveUser.canAddCategory == false) {
+    if (liveUser.role == 4 && liveUser.canAddCategory == 'false') {
       res.status(401).json({
         message: "You are not authorized for this action"
       })
@@ -85,7 +85,7 @@ exports.updateCategory = async (req, res, next) => {
     let id = user.id.toString()
     let catId = category.createdBy.toString()
 
-    if (liveUser.role != 3 && catId == id || liveUser.role == 1 || liveUser.canEditCategory == true) {
+    if (liveUser.role != 3 && catId == id || liveUser.role == 1 || liveUser.canEditCategory == 'true') {
       try {
         const updates = req.body;
         const options = { new: true };
@@ -125,7 +125,7 @@ exports.deleteCategory = async (req, res, next) => {
     let id = user.id.toString()
     let catId = category.createdBy.toString()
     if (categoryExists) {
-      if (liveUser.role == 1 || liveUser.role != 3 && catId == id || liveUser.canDeleteCategory == true) {
+      if (liveUser.role == 1 || liveUser.role != 3 && catId == id || liveUser.canDeleteCategory == 'true') {
         try {
           await categorySchema.findByIdAndRemove(req.params.id, async (err, data) => {
             if (err) throw err;

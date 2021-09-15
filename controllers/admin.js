@@ -49,12 +49,12 @@ exports.adminCreatedUser = async (req, res, next) => {
       productsviewed: [],
       userRole: req.body.userRole,
       role: 4,
-      canEditCategory: req.body.canEditCategory,
-      canDeleteCategory: req.body.canDeleteCategory,
-      canAddCategory: req.body.canAddCategory,
-      canAddProduct: req.body.canAddProduct,
-      canDeleteProduct: req.body.canDeleteProduct,
-      canEditProduct: req.body.canEditProduct,
+      canEditCategory: req.body.canEditCategory.toString(),
+      canDeleteCategory: req.body.canDeleteCategory.toString(),
+      canAddCategory: req.body.canAddCategory.toString(),
+      canAddProduct: req.body.canAddProduct.toString(),
+      canDeleteProduct: req.body.canDeleteProduct.toString(),
+      canEditProduct: req.body.canEditProduct.toString(),
     });
     await user
       .save()

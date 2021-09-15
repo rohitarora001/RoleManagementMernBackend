@@ -43,27 +43,27 @@ const userSchema = new mongoose.Schema({
         ref: 'Product'
     },
     canEditCategory: {
-        type: Boolean,
+        type: String,
         default: false
     },
     canDeleteCategory: {
-        type: Boolean,
+        type: String,
         default: false
     },
     canAddCategory: {
-        type: Boolean,
+        type: String,
         default: false
     },
     canEditProduct: {
-        type: Boolean,
+        type: String,
         default: false
     },
     canDeleteProduct: {
-        type: Boolean,
+        type: String,
         default: false
     },
     canAddProduct: {
-        type: Boolean,
+        type: String,
         default: false
     },
     categories: {
