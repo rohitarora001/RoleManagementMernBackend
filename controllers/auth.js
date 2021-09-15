@@ -93,9 +93,7 @@ exports.userSignup = async (req, res, next) => {
   }
 
   catch (err) {
-    res.status(400).json({
-      message: "An error occured." + err
-    })
+    throw err
     console.log(err);
   }
 }

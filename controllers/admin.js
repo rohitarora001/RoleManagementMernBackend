@@ -37,7 +37,9 @@ exports.adminCreatedUser = async (req, res, next) => {
         message: "Invalid Email Address"
       })
     }
-    const encryptedPassword = await bcrypt.hash(req.body.password, 10);
+
+
+    const encryptedPassword = await bcrypt.hash(req.body.password.toString(), 10);
     const user = new userSchema({
       firstname: req.body.firstname,
       lastname: req.body.lastname,
@@ -49,18 +51,20 @@ exports.adminCreatedUser = async (req, res, next) => {
       productsviewed: [],
       userRole: req.body.userRole,
       role: 4,
-      canEditCategory: req.body.canEditCategory.toString(),
-      canDeleteCategory: req.body.canDeleteCategory.toString(),
-      canAddCategory: req.body.canAddCategory.toString(),
-      canAddProduct: req.body.canAddProduct.toString(),
-      canDeleteProduct: req.body.canDeleteProduct.toString(),
-      canEditProduct: req.body.canEditProduct.toString(),
+      canEditCategory: req.body.canEditCategory,
+      canDeleteCategory: req.body.canDeleteCategory,
+      canAddCategory: req.body.canAddCategory,
+      canAddProduct: req.body.canAddProduct,
+      canDeleteProduct: req.body.canDeleteProduct,
+      canEditProduct: req.body.canEditProduct,
     });
+    console.log(user)
     await user
       .save()
     return res.status(200).json({
       message: "The user successfully registered"
     })
+
   }
 
   catch (err) {
