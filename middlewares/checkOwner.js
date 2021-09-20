@@ -5,12 +5,12 @@ const userSchema = require('../models/userSchema');
 
 
 module.exports = async (req, res, next) => {
+    // console.log(req.body)
     try {
-        let user1;
         if (req.headers.authorization) {
             const token = req.headers.authorization.split(" ")[1];
+            console.log(token)
             const liveUser = jwt.verify(token, process.env.JWT_SECRET);
-            // console.log(liveUser)
             const user = await userSchema.findById(liveUser.id)
             // console.log(user.role)
             if (user && user.role === 1) {

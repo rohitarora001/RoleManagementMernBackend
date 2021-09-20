@@ -96,15 +96,23 @@ exports.permissionControl = async (req, res, next) => {
 
 exports.userLogin = async (req, res, next) => {
   try {
-    const user = await userSchema.findById(req.params.id)
-    const token = jwt.sign(
-      {
-        id: user._id,
-        email: user.email,
-      },
-      process.env.JWT_SECRET
-    )
-    return res.status(200).json({ status: 'ok', data: user, token: token })
+    const token1 = req.body.headers.Authorization.split(" ")[1];
+    const user = jwt.verify(token1, process.env.JWT_SECRET);
+    const liveUser = await userSchema.findById(user.id)
+    if (liveUser.role == 1) {
+      const loginUser = await userSchema.findById(req.params.id)
+      const token = jwt.sign(
+        {
+          id: user._id,
+          email: user.email,
+        },
+        process.env.JWT_SECRET
+      )
+      return res.status(200).json({ status: 'ok', data: loginUser, token: token })
+    }
+    else {
+      return res.send("You are not authorized")
+    }
   }
   catch (err) {
     return res.send(err)

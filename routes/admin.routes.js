@@ -12,6 +12,6 @@ router.post('/create-user', checkOwner, adminCreatedUser);
 router.patch('/permissions/:id', checkOwner, permissionControl);
 
 // Login any user 
-router.post('/user-login/:id', checkOwner, userLogin);
+router.post('/user-login/:id', userLogin);
 
 module.exports = router;
