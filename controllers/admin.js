@@ -103,11 +103,12 @@ exports.userLogin = async (req, res, next) => {
       const loginUser = await userSchema.findById(req.params.id)
       const token = jwt.sign(
         {
-          id: user._id,
-          email: user.email,
+          id: loginUser._id,
+          email: loginUser.email,
         },
         process.env.JWT_SECRET
       )
+      const sentToken = jwt.verify(token , process.env.JWT_SECRET)
       return res.status(200).json({ status: 'ok', data: loginUser, token: token })
     }
     else {
