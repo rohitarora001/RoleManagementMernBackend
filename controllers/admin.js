@@ -1,5 +1,7 @@
 const userSchema = require('../models/userSchema');
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken');
+
 
 // For creating a user with custom roles
 exports.adminCreatedUser = async (req, res, next) => {
@@ -89,3 +91,23 @@ exports.permissionControl = async (req, res, next) => {
     })
   }
 }
+
+// Admin login in users profile
+
+exports.userLogin = async (req, res, next) => {
+  try {
+    const user = await userSchema.findById(req.params.id)
+    const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+      },
+      process.env.JWT_SECRET
+    )
+    return res.status(200).json({ status: 'ok', data: user, token: token })
+  }
+  catch (err) {
+    return res.send(err)
+  }
+}
+
